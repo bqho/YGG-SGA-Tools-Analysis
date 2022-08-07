@@ -33,17 +33,28 @@ SGA_tools_filter = function(x) {
     " x : dataframe just read into the script "
     
     # replace #NUM! errors first
-    # x[is.na(x['Score']),]['Score'] = 0
     x[x['Score'] == '#NUM!',]['Score'] = 0
+     if (nrow(x[x['Score'] == '#NUM!',]) != 0) {
+        x[x['Score'] == '#NUM!',]['Score'] = 0
+    }
 
     # replace the scores that contain JK filter
-    x[x['Additional.information'] == 'status=JK',]['Score'] = 0
+    if (nrow(x[x['Additional.information'] == 'status=JK',]) != 0) {
+        x[x['Additional.information'] == 'status=JK',]['Score'] = 0
+    }
 
     # replace the scores that contain JK filter
-    x[x['Additional.information'] == 'status=CP,JK',]['Score'] = 0
+    else if (nrow(x[x['Additional.information'] == 'status=CP,JK',]) != 0) {
+        x[x['Additional.information'] == 'status=CP,JK',]['Score'] = 0
+    }
+
+    else {
+        next
+    }
 
     return(x)
 }
+
 
 pvalue_filter = function(x, threshold) {
     "Function will replace scores of genes with P-values that
@@ -57,8 +68,9 @@ pvalue_filter = function(x, threshold) {
     x_filter = SGA_tools_filter(x)
 
     # replace #NUM! errors first
-    # x_filter[is.na(x_filter['p.Value']),]['Score'] = 0
-    x_filter[x_filter['p.Value'] == '#NUM!',]['Score'] = 0
+    if (nrow(x_filter[x_filter['p.Value'] == '#NUM!',]) != 0) {
+        x_filter[x_filter['p.Value'] == '#NUM!',]['Score'] = 0
+    }
 
     # replace the scores that contain p-value > threshold
     x_filter[which(x_filter['p.Value'] > threshold),]['Score'] = 0
