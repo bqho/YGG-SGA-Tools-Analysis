@@ -1,0 +1,11 @@
+# Personal Mac files
+*DS_Store
+*DS_store
+
+# Build Directories
+/build
+/dist
+
+# Additional build files
+__pycache__
+SGAToolsAnalysis.spec

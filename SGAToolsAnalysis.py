@@ -25,6 +25,7 @@ layout_1 = [[sg.Text('Entire file to run pre-processing:')],
 
 layout_2 = [[sg.Text('Select folder containing R-scripts', size=(30, 1)), sg.Input(), sg.FolderBrowse(key="Rscript_path")],
             [sg.Text('Click to process the file; outputs CSV to designated folder:')],
+            [sg.Button('update_packages')],
             [sg.Button('Run Processing')],
             [sg.Text('', size=(9, 1))]]
 
@@ -123,6 +124,17 @@ while True:
                 'cshl_exp7.r',
                 file,
                 path
+            ]
+        )
+
+    # when button is clicked to update all packages,
+    # runs the R script to install packages from R
+    elif event == 'update_packages':
+        os.chdir(R_scripts_path)
+        subprocess.call(
+            [
+                'Rscript',
+                'update_packages.r'
             ]
         )
 
