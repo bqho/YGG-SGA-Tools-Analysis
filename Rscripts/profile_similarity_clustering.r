@@ -152,4 +152,47 @@ dev.off()
 row_indices = h$tree_row[['order']]
 col_indices = h$tree_col[['order']]
 
+
+
+# Data Output ________________________________________________________________
+##############################################################################
+
+# Write the final matrix that has query gene placed in the costanzo et al. mat
 write.csv(final_matrix[row_indices, col_indices], file = "your_query_profile_similarity.csv")
+
+
+
+# Interactive Heatmap ________________________________________________________
+##############################################################################
+
+data = read.csv('/Users/brandonho/Desktop/your_query_profile_similarity.csv')
+
+heatmap_col_break = colors_breaks(20, -0.1, 0.1, "blue", "yellow")
+
+mat = data.matrix(data[,2:ncol(data)])
+rownames(mat) = data$X
+
+
+ComplexHeatmap::pheatmap(mat[1:100,],
+             show_rownames=TRUE,
+             show_colnames=FALSE,
+             scale = "none",
+             clustering_method="average",
+             clustering_distance_rows="correlation",
+             clustering_distance_cols="correlation",
+             col = heatmap_col_break[[2]],
+             breaks = heatmap_col_break[[1]])
+
+htShiny()
+
+
+
+
+
+
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("InteractiveComplexHeatmap", ask = FALSE)
+
+
